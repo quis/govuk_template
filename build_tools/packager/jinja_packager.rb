@@ -15,8 +15,18 @@ module Packager
       @target_dir.rmtree if @target_dir.exist?
       @target_dir.mkpath
       Dir.chdir(@target_dir) do |dir|
+        generate_setup_py
         prepare_contents
         create_tarball
+      end
+    end
+
+    def generate_setup_py
+      template_abbreviation = "jinja"
+      template_name = "jinja"
+      contents = ERB.new(File.read(File.join(@repo_root, "source/setup.py.erb"))).result(binding)
+      File.open(File.join(@target_dir, "setup.py"), "w") do |f|
+        f.write contents
       end
     end
 
