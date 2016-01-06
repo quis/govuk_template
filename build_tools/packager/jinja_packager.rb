@@ -32,6 +32,7 @@ module Packager
       File.open(File.join(@target_dir, "setup.py"), "w") do |f|
         f.write contents
       end
+      output, status = Open3.capture2e("cp #{File.join(@repo_root, "source/MANIFEST.in").shellescape} #{@target_dir.to_s.shellescape}")
     end
 
     def add_package_init
